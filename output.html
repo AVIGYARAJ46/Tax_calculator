@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tax Amount</title>
+    <style>
+        /* Table styling */
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+            border: 2px solid lavender;
+        }
+
+        th, td {
+            border: 1px solid lavender;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: lavender;
+        }
+
+        /* Close button styling */
+        .close-btn {
+            display: block;
+            width: 100px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: lavender;
+            border: 2px solid lavender;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #333;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 0.5em;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="Tax.html">Home</a>
+    </div>
+
+    <table>
+        <tr>
+            <th colspan="2">Your Overall income would be</th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div id="taxAmount"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">after tax deductions</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <a href="#" class="close-btn">Close</a>
+            </td>
+        </tr>
+    </table>
+
+    <footer>
+        <p>Developed by Avigya@2024</p>
+    </footer>
+
+    <script>
+        // Retrieve tax amount from URL parameter
+        var urlParams = new URLSearchParams(window.location.search);
+        var taxAmount = urlParams.get('taxAmount');
+
+        // Display tax amount
+        document.getElementById('taxAmount').innerHTML = 'Amount: ' + taxAmount + ' Lakhs';
+
+        // Close button functionality
+        document.querySelector('.close-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+            window.close();
+        });
+    </script>
+</body>
+
+</html>

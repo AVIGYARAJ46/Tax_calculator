@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tax Calculator</title>
+    <meta charset="UTF-8">
+    <style>
+        .container {
+            width: 500px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .form-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #f9d1d1;
+        }
+
+        .form-group {
+            margin: 20px 0;
+            text-align: left;
+            position: relative; /* Position relative for tooltip */
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        input[type='number'] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Green color */
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            top: 0;
+            right: -20px; /* Adjust as needed */
+            font-size: 14px;
+            color: #888;
+            cursor: pointer;
+        }
+
+        .tooltip::after {
+            content: '?';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 50%;
+            background-color: #ccc;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #333;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 1;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="#">Home</a>
+    </div>
+
+    <div class="container">
+        <h2>Tax Calculator</h2>
+        <div class="form-container">
+            <form id="tax-form">
+                <div class="form-group">
+                    <label for="grossIncome">Gross Annual Income: <span class="tooltip"><span class="tooltiptext">This is your total income before any deductions or taxes.</span></span></label>
+                    <input type="number" id="grossIncome" name="grossIncome" placeholder="Enter your gross annual income" required />
+                </div>
+                <div class="form-group">
+                    <label for="extraIncome">Extra Income: <span class="tooltip"><span class="tooltiptext">Include any additional income sources beyond your regular salary.</span></span></label>
+                    <input type="number" id="extraIncome" name="extraIncome" placeholder="Enter any extra income" required />
+                </div>
+                <div class="form-group">
+                    <label for="ageGroup">Age Group:</label>
+                    <select id="ageGroup" name="ageGroup" required>
+                        <option value="<40">&lt;40</option>
+                        <option value="≥40 & <60">≥40 &lt;60</option>
+                        <option value="≥60">&ge;60</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="deductions">Total Deductions: <span class="tooltip"><span class="tooltiptext">Include any deductions that reduce your taxable income.</span></span></label>
+                    <input type="number" id="deductions" name="deductions" placeholder="Enter total applicable deductions" required />
+                </div>
+                
+                <p>click on submit to calculate</p>
+                <button type="submit">Submit</button>
+            </form>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Developed by Avigya@2024</p>
+    </footer>
+
+    <script>
+        document.getElementById('tax-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    var grossIncome = parseFloat(document.getElementById('grossIncome').value);
+    var extraIncome = parseFloat(document.getElementById('extraIncome').value);
+    var deductions = parseFloat(document.getElementById('deductions').value);
+    var ageGroup = document.getElementById('ageGroup').value;
+
+    if (!isNaN(grossIncome) && !isNaN(extraIncome) && !isNaN(deductions)) {
+        var totalIncome = grossIncome + extraIncome - deductions;
+        var taxAmount = 0;
+
+        if (totalIncome <= 800000) {
+            // No tax for income under 8 Lakhs
+            taxAmount = 0;
+        } else {
+            // Calculate tax amount for income over 8 Lakhs
+            var taxableIncome = totalIncome - 800000;
+
+            switch (ageGroup) {
+                case '<40':
+                    taxAmount = taxableIncome * 0.3; // 30% tax for age < 40
+                    break;
+                case '≥40 & <60':
+                    taxAmount = taxableIncome * 0.4; // 40% tax for age ≥ 40 but < 60
+                    break;
+                case '≥60':
+                    taxAmount = taxableIncome * 0.1; // 10% tax for age ≥ 60
+                    break;
+            }
+        }
+
+        // Redirect to output page with tax amount as parameter
+        window.location.href = 'output.html?taxAmount=' + taxAmount.toFixed(2);
+    } else {
+        alert('Please enter valid numbers for gross income, extra income, and deductions.');
+    }
+});
+  </script>
+</body>
+
+</html>
